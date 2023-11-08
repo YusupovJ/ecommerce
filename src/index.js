@@ -1,0 +1,16 @@
+import express from "express";
+import env from "./config/env.config.js";
+import db from "./config/db.config.js";
+import userRouter from "./routes/user.route.js";
+
+const app = express();
+const port = env.PORT;
+
+app.use(express.json());
+app.use("/users", userRouter);
+
+app.listen(port, async () => {
+	await db.connect();
+
+	console.log(`Server was started on port ${port}`);
+});
