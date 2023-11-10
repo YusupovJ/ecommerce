@@ -1,17 +1,10 @@
 import db from "../config/db.config.js";
 
 class UserService {
-    async getLastInserted() {
-        const sqlQuery = "SELECT * FROM users WHERE id = LAST_INSERT_ID()";
-        const [user] = await db.query(sqlQuery);
-
-        return user[0];
-    }
-
     async add(user) {
         const sqlQuery = "INSERT INTO users (name, password, email, age) VALUES (?, ?, ?, ?)";
-        await db.query(sqlQuery, [user.name, user.password, user.email, user.age]);
-        const lastInserted = await this.getLastInserted();
+        const [result] = await db.query(sqlQuery, [user.name, user.password, user.email, user.age]);
+        const lastInserted = await this.getByID(result.insertId);
 
         return {
             user: lastInserted,
