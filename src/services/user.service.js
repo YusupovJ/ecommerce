@@ -12,10 +12,16 @@ class UserService {
         };
     }
 
-    async getAll() {
-        const sqlQuery = "SELECT * FROM users";
-        const [users] = await db.query(sqlQuery);
+    async getAll(limit, offset) {
+        let sqlQuery;
 
+        if (isNaN(offset)) {
+            sqlQuery = "SELECT * FROM users";
+        } else {
+            sqlQuery = "SELECT * FROM users LIMIT ? OFFSET ?";
+        }
+
+        const [users] = await db.query(sqlQuery, [limit, offset]);
         return users;
     }
 

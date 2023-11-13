@@ -10,7 +10,7 @@ class UserController {
     async create(req, res) {
         try {
             const result = await userService.add(req.body);
-            res.json(result);
+            res.status(201).json(result);
         } catch (error) {
             handleError(res, error);
         }
@@ -18,7 +18,10 @@ class UserController {
 
     async findAll(req, res) {
         try {
-            const users = await userService.getAll();
+            const limit = 5;
+            const offset = (req.query.page - 1) * limit;
+
+            const users = await userService.getAll(limit, offset);
             res.json(users);
         } catch (error) {
             handleError(res, error);
@@ -40,7 +43,7 @@ class UserController {
             const newUser = { ...user, ...req.body };
             const result = await userService.update(req.params.id, newUser);
 
-            res.json(result);
+            res.status(201).json(result);
         } catch (error) {
             handleError(res, error);
         }
