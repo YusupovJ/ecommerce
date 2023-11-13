@@ -10,7 +10,7 @@ app.use(express.json());
 app.use("/users", userRouter);
 
 app.listen(port, async () => {
-	await db.connect();
+    await db.connect();
 
-	console.log(`Server was started on port ${port}`);
+    console.log(`Server was started on port ${port}`);
 });
