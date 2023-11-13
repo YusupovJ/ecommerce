@@ -1,18 +1,12 @@
 import userService from "../services/user.service.js";
 
-const handleError = (res, error) => {
-    res.status(500).json({
-        message: error.message,
-    });
-};
-
 class UserController {
     async create(req, res) {
         try {
             const result = await userService.add(req.body);
             res.status(201).json(result);
         } catch (error) {
-            handleError(res, error);
+            res.status(error.status || 500).json({ message: error.message });
         }
     }
 
@@ -24,38 +18,51 @@ class UserController {
             const users = await userService.getAll(limit, offset);
             res.json(users);
         } catch (error) {
-            handleError(res, error);
+            res.status(error.status || 500).json({ message: error.message });
         }
     }
 
     async findByID(req, res) {
         try {
             const user = await userService.getByID(req.params.id);
+
+            if (!user) {
+                const error = new Error("User not found");
+                error.status = 404;
+                throw error;
+            }
+
             res.json(user);
         } catch (error) {
-            handleError(res, error);
+            res.status(error.status || 500).json({ message: error.message });
         }
     }
 
     async update(req, res) {
         try {
             const user = await userService.getByID(req.params.id);
+
+            if (!user) {
+                const error = new Error("User not found");
+                error.status = 404;
+                throw error;
+            }
+
             const newUser = { ...user, ...req.body };
             const result = await userService.update(req.params.id, newUser);
 
             res.status(201).json(result);
         } catch (error) {
-            handleError(res, error);
+            res.status(error.status || 500).json({ message: error.message });
         }
     }
 
     async delete(req, res) {
         try {
             const result = await userService.delete(req.params.id);
-
             res.json(result);
         } catch (error) {
-            handleError(res, error);
+            res.status(error.status || 500).json({ message: error.message });
         }
     }
 }

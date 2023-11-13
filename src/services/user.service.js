@@ -42,6 +42,15 @@ class UserService {
         };
     }
     async delete(id) {
+        const user = await this.getByID(id);
+
+        if (!user) {
+            const error = new Error("User not found");
+            error.status = 404;
+
+            throw error;
+        }
+
         const sqlQuery = "DELETE FROM users WHERE id = ?";
         await db.query(sqlQuery, [id]);
 
