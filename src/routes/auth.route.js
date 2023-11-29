@@ -1,6 +1,6 @@
 import { Router } from "express";
 import authConroller from "../controllers/auth.controller.js";
-import authGuard from "../middleware/auth.guard.js";
+import authGuard from "../middleware/authGuard.js";
 
 const authRouter = Router();
 

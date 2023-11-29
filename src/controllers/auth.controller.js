@@ -29,8 +29,8 @@ class AuthController {
 
             const [{ insertId: id }] = await db.query("INSERT INTO users SET ?", newUser);
 
-            const refreshToken = jwt.sign({ id: id, role: "user" }, refreshSecret, { expiresIn: "180s" });
-            const accessToken = jwt.sign({ id: id, role: "user" }, accessSecret, { expiresIn: "60s" });
+            const refreshToken = jwt.sign({ id: id, role: "user" }, refreshSecret, { expiresIn: "30d" });
+            const accessToken = jwt.sign({ id: id, role: "user" }, accessSecret, { expiresIn: "600s" });
 
             res.json({ refreshToken, accessToken });
 
@@ -59,8 +59,8 @@ class AuthController {
                 throw error;
             }
 
-            const refreshToken = jwt.sign({ id: user.id, role: user.role }, refreshSecret, { expiresIn: "180s" });
-            const accessToken = jwt.sign({ id: user.id, role: user.role }, accessSecret, { expiresIn: "60s" });
+            const refreshToken = jwt.sign({ id: user.id, role: user.role }, refreshSecret, { expiresIn: "30d" });
+            const accessToken = jwt.sign({ id: user.id, role: user.role }, accessSecret, { expiresIn: "600s" });
 
             res.json({ refreshToken, accessToken });
 
@@ -94,8 +94,8 @@ class AuthController {
                 throw error;
             }
 
-            const newRefreshToken = jwt.sign({ id, role }, refreshSecret, { expiresIn: "180s" });
-            const newAccessToken = jwt.sign({ id, role }, accessSecret, { expiresIn: "60s" });
+            const newRefreshToken = jwt.sign({ id, role }, refreshSecret, { expiresIn: "30d" });
+            const newAccessToken = jwt.sign({ id, role }, accessSecret, { expiresIn: "600s" });
 
             res.json({ refreshToken: newRefreshToken, accessToken: newAccessToken });
 
