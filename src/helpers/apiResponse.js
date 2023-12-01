@@ -1,22 +1,25 @@
 const apiResponse = (res) => {
-	return {
-		send(data, pagination) {
-			let response = {
-				data,
-				error: null,
-			};
+    return {
+        send(data, pagination, status = 200) {
+            let response = {
+                data,
+                pagination: pagination || null,
+                error: null,
+                date: new Date(),
+            };
 
-			if (pagination) {
-				response.totalPage = pagination.totalPages();
-				response.currentPage = pagination.page;
-			}
-
-			res.json(response);
-		},
-		error(message, status = 500) {
-			res.status(status).json({ data: null, error: message });
-		},
-	};
+            res.status(status).json(response);
+        },
+        error(message, status = 500) {
+            let response = {
+                data: null,
+                error: message,
+                pagination: null,
+                date: new Date(),
+            };
+            res.status(status).json(response);
+        },
+    };
 };
 
 export default apiResponse;
